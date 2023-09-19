@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 
 class AuthController extends Controller
@@ -16,7 +15,7 @@ class AuthController extends Controller
 	 */
 	public function login(Request $request)
 	{
-		$credentials = $request->only(['email', 'password']);
+		$credentials = $request->only(['login', 'password']);
 
 		if (!$token = auth(guard: "api")->attempt($credentials))
 		{
@@ -27,18 +26,40 @@ class AuthController extends Controller
 	}
 
 	/**
-     * Get the token array structure.	
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondWithToken($token)
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ]);
-    }
+	 * Get the token array structure.	
+	 *
+	 * @param  string $token
+	 *
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	protected function respondWithToken($token)
+	{
+		return response()->json([
+			'access_token' => $token,
+			'token_type' => 'bearer',
+			'expires_in' => auth()->factory()->getTTL() * 60
+		]);
+	}
+
+	 /**
+	 * Log the user out (Invalidate the token).
+	 *
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function logout()
+	{
+		auth()->logout();
+
+		return response()->json(['message' => 'Successfully logged out']);
+	}
+
+	/**
+	 * Refresh a token.
+	 *
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function refresh()
+	{
+		return $this->respondWithToken(auth()->refresh());
+	}
 }

@@ -26,6 +26,8 @@ use App\Http\Controllers\Api\MovimentacaoController;
 
 
 Route::post('auth/login', [AuthController::class, "login"]);
+Route::post('auth/refresh', [AuthController::class, "refresh"]);
+
 Route::group(["middleware" => ["jwt"]], function(){
 	Route::post("caminhao/store", [CaminhaoController::class, "store"]);
 	Route::post("caminhao/list", [CaminhaoController::class, "list"]);
@@ -40,5 +42,7 @@ Route::group(["middleware" => ["jwt"]], function(){
 	Route::post("movimentacao/store", [MovimentacaoController::class, "store"]);
 	Route::post("movimentacao/update", [MovimentacaoController::class, "update"]);
 	
+	Route::post('auth/logout', [AuthController::class, "logout"]);
+
 });
 Route::post("user/store", [UserController::class, "store"]);

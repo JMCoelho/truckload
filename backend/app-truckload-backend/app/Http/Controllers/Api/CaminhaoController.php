@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Models\Caminhao;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class CaminhaoController extends Controller
 {
@@ -16,7 +18,7 @@ class CaminhaoController extends Controller
         $data = $request->all();
         $caminhoes =
            Caminhao::where("user_id", $data["user_id"])->get();
-        return json_encode($caminhoes);
+        return response()->json($caminhoes);
     }
 
     /**
@@ -25,8 +27,23 @@ class CaminhaoController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $caminhao = Caminhao::create($data);
-        return json_encode($caminhao);
+
+        try{
+			$caminhao = Caminhao::create($data);
+			$mensagem = [
+				"sucesso"=> true,
+				"caminhao" => $caminhao
+			];
+		}
+		catch(Throwable $e)
+		{
+			Log::error($e);
+			$mensagem = [
+				"sucesso"=> false,
+				"mensagem"=> "falha na adição de caminhão"
+			];
+		}
+		return response()->json($mensagem);
     }
 
     /**
@@ -36,9 +53,22 @@ class CaminhaoController extends Controller
     {
         $data = $request->all(['transportadora', "tipo"]);
         $id = $request->only(['id']);
-
-        $caminhao = Caminhao::where($id)->update($data);
-        return json_encode($caminhao);
+        try{
+            Caminhao::where($id)->update($data);
+			$mensagem = [
+				"sucesso"=> true,
+				"mensagem"=> "Atualizado com sucesso"
+			];
+		}
+		catch(Throwable $e)
+		{
+			Log::error($e);
+			$mensagem = [
+				"sucesso"=> false,
+				"mensagem"=> "Falha ao atualizar caminhao"
+			];
+		}
+        return response()->json($mensagem);
     }
 
     /**
@@ -47,8 +77,22 @@ class CaminhaoController extends Controller
     public function destroy(Request $request)
     {
         $data = $request->all();
-        
-        $caminhao = Caminhao::destroy($data);
-        return json_encode($caminhao);
+
+        try{
+            Caminhao::destroy($data);
+			$mensagem = [
+				"sucesso"=> true,
+				"mensagem"=> "Removido com sucesso"
+			];
+		}
+		catch(Throwable $e)
+		{
+			Log::error($e);
+			$mensagem = [
+				"sucesso"=> false,
+				"mensagem"=> "Falha ao remover caminhao"
+			];
+		}
+        return response()->json($mensagem);
     }
 }
