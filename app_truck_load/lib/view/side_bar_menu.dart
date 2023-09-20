@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../controller/LoginController.dart';
 import 'agendar_page.dart';
 import 'caminhao_list_page.dart';
 import 'login_page.dart';
 
 class SideBarMenu extends StatelessWidget {
+  LoginController loginController = LoginController();
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -41,9 +44,27 @@ class SideBarMenu extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),
-            onTap: () => {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LoginPage())),
+            onTap: () async => {
+              if (await loginController.logout())
+                {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  )
+                }
+              else
+                {
+                  showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                              title: const Text('Falha para deslogar'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, 'OK'),
+                                  child: const Text('Cancel'),
+                                ),
+                              ]))
+                }
             },
           ),
         ],

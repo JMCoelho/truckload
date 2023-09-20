@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:app_truck_load/model/agendamento_model.dart';
 import 'package:app_truck_load/utilities/consts.dart';
 import 'package:app_truck_load/utilities/secure_storage.dart';
-import 'package:app_truck_load/model/auth_model.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -12,15 +11,6 @@ const secureStorage = SecureStorage();
 Future<Agendamento> agendamentoShow() async {
   const urlCaminhao = "Agendamento/show";
 
-  var tokenData = await secureStorage
-      .readOne(key: "CURRENT_USER")
-      .then((String result) {} as FutureOr Function(String? value));
-
-  Map<String, String> requestHeaders = {
-    'Content-type': 'application/json',
-    'Accept': 'application/json',
-    'Authorization': "Bearer $tokenData.access_token"
-  };
   final response = await http.post(Uri.parse(Consts.url + urlCaminhao));
 
   if (response.statusCode == 200) {
