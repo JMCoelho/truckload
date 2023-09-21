@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
+
 
 
 class AuthController extends Controller
@@ -22,7 +24,9 @@ class AuthController extends Controller
 			return response()->json(['error' => 'Unauthorized'], 401);
 		}
 
-		return $this->respondWithToken($token);
+		$user = User::select("id")->where("login", $credentials["login"])->first();
+
+		return response()->json(["token"=>$token, "user_id" => $user["id"]]);
 	}
 
 	/**

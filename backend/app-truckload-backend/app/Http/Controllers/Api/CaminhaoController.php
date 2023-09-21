@@ -27,12 +27,12 @@ class CaminhaoController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-
+		Log::debug(json_encode($data));
         try{
-			$caminhao = Caminhao::create($data);
+			unset($data["id"]);
+			Caminhao::create($data);
 			$mensagem = [
 				"sucesso"=> true,
-				"caminhao" => $caminhao
 			];
 		}
 		catch(Throwable $e)

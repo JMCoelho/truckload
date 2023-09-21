@@ -2,20 +2,19 @@ import 'package:app_truck_load/view/side_bar_menu.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/CaminhaoController.dart';
+import '../model/caminhao_model.dart';
 import 'caminhao_list_page.dart';
 
-class CaminhaoPage extends StatefulWidget {
-  const CaminhaoPage({super.key});
+class CaminhaoUpdatePage extends StatefulWidget {
+  const CaminhaoUpdatePage({super.key, required this.caminhao});
+  final Caminhao caminhao;
 
   @override
-  State<CaminhaoPage> createState() => _CaminhaoPageState();
+  State<CaminhaoUpdatePage> createState() => _CaminhaoUpdatePageState();
 }
 
-class _CaminhaoPageState extends State<CaminhaoPage> {
+class _CaminhaoUpdatePageState extends State<CaminhaoUpdatePage> {
   CaminhaoController caminhaoController = CaminhaoController();
-  String placa = "";
-  String transportadora = "";
-  String tipoCaminhao = "";
 
   @override
   Widget build(BuildContext context) {
@@ -40,17 +39,10 @@ class _CaminhaoPageState extends State<CaminhaoPage> {
                         color: Color.fromARGB(255, 44, 44, 216))),
                 SizedBox(height: 70),
                 TextField(
+                  controller: TextEditingController(
+                      text: widget.caminhao.transportadora),
                   onChanged: (text) {
-                    placa = text;
-                  },
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Placa do Caminhao"),
-                ),
-                SizedBox(height: 20),
-                TextField(
-                  onChanged: (text) {
-                    transportadora = text;
+                    widget.caminhao.transportadora = text;
                   },
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),
@@ -58,8 +50,9 @@ class _CaminhaoPageState extends State<CaminhaoPage> {
                 ),
                 SizedBox(height: 20),
                 TextField(
+                  controller: TextEditingController(text: widget.caminhao.tipo),
                   onChanged: (text) {
-                    tipoCaminhao = text;
+                    widget.caminhao.tipo = text;
                   },
                   decoration: InputDecoration(
                       border: OutlineInputBorder(), labelText: "Tipo"),
@@ -72,10 +65,8 @@ class _CaminhaoPageState extends State<CaminhaoPage> {
                       height: MediaQuery.of(context).size.height / 15,
                       child: FilledButton(
                         onPressed: () async {
-                          if (await caminhaoController.addCaminhao(
-                              placa: placa,
-                              transportadora: transportadora,
-                              tipoCaminhao: tipoCaminhao)) {
+                          if (await caminhaoController.updateCaminhao(
+                              caminhao: widget.caminhao)) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -86,7 +77,7 @@ class _CaminhaoPageState extends State<CaminhaoPage> {
                                 context: context,
                                 builder: (BuildContext context) => AlertDialog(
                                         title: const Text(
-                                            'Falha ao salvar caminhão'),
+                                            'Falha ao atualizar caminhão'),
                                         actions: <Widget>[
                                           TextButton(
                                             onPressed: () =>

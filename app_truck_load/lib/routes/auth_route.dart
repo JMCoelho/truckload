@@ -18,17 +18,13 @@ Future<Response> auth({required String login, required String senha}) async {
 
 Future<Response> logoutApp() async {
   const urlMovimentacao = "auth/logout";
-  const aaa = FlutterSecureStorage();
+  const secureStorage = FlutterSecureStorage();
 
-  // var tokenData = await secureStorage
-  //     .readOne(key: "CURRENT_USER")
-  //     .then((String result) {} as FutureOr Function(String? value));
-
-  var a = await aaa.read(key: "CURRENT_USER") ?? "";
+  var token = await secureStorage.read(key: "CURRENT_USER_TOKEN") ?? "";
   Map<String, String> requestHeaders = {
     'Content-type': 'application/json',
     'Accept': 'application/json',
-    'Authorization': "Bearer $a"
+    'Authorization': "Bearer $token"
   };
 
   return await http.post(Uri.parse(Consts.url + urlMovimentacao),

@@ -12,7 +12,7 @@ class Caminhao {
   String placa;
   String transportadora;
   String tipo;
-  int userId;
+  String userId;
   int id;
 
   Caminhao({
@@ -20,7 +20,7 @@ class Caminhao {
     required this.transportadora,
     required this.tipo,
     required this.userId,
-    required this.id,
+    this.id = 0,
   });
 
   factory Caminhao.fromJson(Map<String, dynamic> json) => Caminhao(

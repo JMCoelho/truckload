@@ -1,67 +1,62 @@
 import 'dart:convert';
 import 'package:app_truck_load/model/caminhao_model.dart';
 import 'package:app_truck_load/utilities/consts.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
-Future<List<Caminhao>> caminhaoList() async {
+const secureStorage = FlutterSecureStorage();
+
+Future<Response> caminhaoList({required int userId}) async {
   const urlCaminhao = "caminhao/list";
 
-  final response = await http.post(Uri.parse(Consts.url + urlCaminhao));
+  var token = await secureStorage.read(key: "CURRENT_USER_TOKEN") ?? "";
+  Map<String, String> requestHeaders = {
+    'Content-type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': "Bearer $token"
+  };
 
-  if (response.statusCode == 200) {
-    List<Caminhao> caminhoes = (json.decode(response.body) as List)
-        .map((data) => Caminhao.fromJson(data))
-        .toList();
-    return caminhoes;
-  } else {
-    throw Exception("Deu ruim");
-  }
+  return await http.post(Uri.parse(Consts.url + urlCaminhao),
+      headers: requestHeaders, body: json.encode({"user_id": userId}));
 }
 
-Future<Caminhao> caminhaoStore() async {
+Future<Response> caminhaoStore({required Caminhao caminhao}) async {
   const urlCaminhao = "caminhao/store";
+  var token = await secureStorage.read(key: "CURRENT_USER_TOKEN") ?? "";
+  Map<String, String> requestHeaders = {
+    'Content-type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': "Bearer $token"
+  };
 
-  final response = await http.post(Uri.parse(Consts.url + urlCaminhao));
-
-  if (response.statusCode == 200) {
-    var data = json.decode(response.body);
-    if (data.sucesso) {
-      return Caminhao.fromJson(data.caminhao);
-    } else {
-      throw Exception(data.mensagem);
-    }
-  } else {
-    throw Exception("Deu ruim");
-  }
+  return await http.post(Uri.parse(Consts.url + urlCaminhao),
+      headers: requestHeaders, body: json.encode(caminhao.toJson()));
 }
 
-Future caminhaoUpdate() async {
+Future caminhaoUpdate({required Caminhao caminhao}) async {
   const urlCaminhao = "caminhao/update";
+  var token = await secureStorage.read(key: "CURRENT_USER_TOKEN") ?? "";
+  Map<String, String> requestHeaders = {
+    'Content-type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': "Bearer $token"
+  };
 
-  final response = await http.post(Uri.parse(Consts.url + urlCaminhao));
-
-  if (response.statusCode == 200) {
-    var data = json.decode(response.body);
-    if (!data.sucesso) {
-      throw Exception(data.mensagem);
-    }
-  } else {
-    throw Exception("Deu ruim");
-  }
+  return await http.post(Uri.parse(Consts.url + urlCaminhao),
+      headers: requestHeaders, body: json.encode(caminhao.toJson()));
 }
 
-Future caminhaoDestroy() async {
+Future<Response> caminhaoDestroy({required int id}) async {
   const urlCaminhao = "caminhao/destroy";
+  var token = await secureStorage.read(key: "CURRENT_USER_TOKEN") ?? "";
+  Map<String, String> requestHeaders = {
+    'Content-type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': "Bearer $token"
+  };
 
-  final response = await http.post(Uri.parse(Consts.url + urlCaminhao));
-
-  if (response.statusCode == 200) {
-    var data = json.decode(response.body);
-    if (!data.sucesso) {
-      throw Exception(data.mensagem);
-    }
-  } else {
-    throw Exception("Deu ruim");
-  }
+  return await http.post(Uri.parse(Consts.url + urlCaminhao),
+      headers: requestHeaders, body: json.encode({"id": id}));
 }
