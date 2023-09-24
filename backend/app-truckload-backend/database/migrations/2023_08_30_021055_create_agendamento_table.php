@@ -16,10 +16,13 @@ return new class extends Migration
             $table->id();
 			$table->string("carreta", 100);
 			$table->string("nota_fiscal", 100);
+            $table->string("placa", 100);
+            $table->string("destino", 100);
             $table->dateTime('data_agendada', $precision = 0);
             $table->foreignId("caminhao_id");
             $table->foreignId("user_id");
             $table->integer('status');
+            $table->integer('tipo');
             $table->dateTime("updated_at",$precision = 0);
 			$table->dateTime("created_at",$precision = 0);
         });

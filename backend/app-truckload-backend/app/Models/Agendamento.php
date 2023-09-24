@@ -17,6 +17,9 @@ class Agendamento extends Model
         "data_agendada",
         "caminhao_id",
         "user_id",
-        "status"
+        "status",
+        "placa",
+        "destino",
+        "tipo"
     ];
 }

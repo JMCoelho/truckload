@@ -18,11 +18,10 @@ class AgendamentoController extends Controller
 	public function store(Request $request)
 	{
 		$data = $request->all();
-
-	   $caminhao = Caminhao::where("user_id", $data["user_id"])
+		$caminhao = Caminhao::where("user_id", $data["user_id"])
 			->where("placa", $data["placa"])
 			->orderBy('id', 'desc')->first();
-		if(isset($caminhao) || empty($caminhao))
+		if(!isset($caminhao) || empty($caminhao))
 		{
 			$mensagem = [
 				"sucesso"=> false,
@@ -32,6 +31,7 @@ class AgendamentoController extends Controller
 		}
 
 		$data["status"] = 0;
+		$data["caminhao_id"] = $caminhao["id"];
 		try{
 			$agendamento = Agendamento::create($data);
 			$mensagem = [
