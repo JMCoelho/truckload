@@ -23,6 +23,20 @@ Future<Response> agendamentoShow({required int userId}) async {
       headers: requestHeaders, body: json.encode({"user_id": userId}));
 }
 
+Future<Response> hasAgendamentoAtivo({required int userId}) async {
+  const urlCaminhao = "agendamento/show";
+
+  var token = await secureStorage.read(key: "CURRENT_USER_TOKEN") ?? "";
+  Map<String, String> requestHeaders = {
+    'Content-type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': "Bearer $token"
+  };
+
+  return await http.post(Uri.parse(Consts.url + urlCaminhao),
+      headers: requestHeaders, body: json.encode({"user_id": userId}));
+}
+
 Future<Response> agendamentoStore({required Agendamento agendamento}) async {
   const urlCaminhao = "agendamento/store";
 
@@ -37,10 +51,7 @@ Future<Response> agendamentoStore({required Agendamento agendamento}) async {
       headers: requestHeaders, body: json.encode(agendamento.toJson()));
 }
 
-Future<Response> agendamentoUpdate(
-    {required String placaCarreta,
-    required String notaFiscal,
-    required int id}) async {
+Future<Response> agendamentoUpdate({required Agendamento agendamento}) async {
   const urlCaminhao = "agendamento/update";
 
   var token = await secureStorage.read(key: "CURRENT_USER_TOKEN") ?? "";
@@ -51,12 +62,10 @@ Future<Response> agendamentoUpdate(
   };
 
   return await http.post(Uri.parse(Consts.url + urlCaminhao),
-      headers: requestHeaders,
-      body: json.encode(
-          {"placaCarreta": placaCarreta, "notaFiscal": notaFiscal, "id": id}));
+      headers: requestHeaders, body: json.encode(agendamento.toJson()));
 }
 
-Future<Response> agendamentoCancel({required int id}) async {
+Future<Response> agendamentoCancel({required int? id}) async {
   const urlCaminhao = "agendamento/cancel";
 
   var token = await secureStorage.read(key: "CURRENT_USER_TOKEN") ?? "";

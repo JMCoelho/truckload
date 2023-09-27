@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
+
 
 
 
@@ -18,6 +20,7 @@ class AuthController extends Controller
 	public function login(Request $request)
 	{
 		$credentials = $request->only(['login', 'password']);
+		Log::debug("bateu");
 
 		if (!$token = auth(guard: "api")->attempt($credentials))
 		{

@@ -1,6 +1,8 @@
+import 'package:app_truck_load/view/cheguei_page.dart';
 import 'package:app_truck_load/view/side_bar_menu.dart';
 import 'package:flutter/material.dart';
 
+import '../controller/AgendamentoController.dart';
 import 'agendar_page.dart';
 import 'caminhao_list_page.dart';
 
@@ -12,6 +14,8 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
+  AgendamentoController agendamentoController = AgendamentoController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,11 +36,18 @@ class _MenuPageState extends State<MenuPage> {
                   width: MediaQuery.of(context).size.width / 2,
                   height: MediaQuery.of(context).size.height / 12,
                   child: FilledButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AgendarPage()));
+                    onPressed: () async {
+                      if (await agendamentoController.hasAgendamento()) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChegueiPage()));
+                      } else {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AgendarPage()));
+                      }
                     },
                     child: FittedBox(
                         fit: BoxFit.fitWidth,

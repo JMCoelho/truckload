@@ -22,6 +22,7 @@ class LoginController {
         throw Exception("Deu ruim");
       }
     } catch (e) {
+      print(e);
       okLogin = false;
     }
 

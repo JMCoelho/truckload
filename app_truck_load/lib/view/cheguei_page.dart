@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../controller/AgendamentoController.dart';
 import '../model/agendamento_model.dart';
-
-import 'package:intl/intl.dart';
+import 'editar_agendamento_page.dart';
+import 'menu_page.dart';
 
 class ChegueiPage extends StatefulWidget {
   const ChegueiPage({super.key});
@@ -54,7 +54,7 @@ class _ChegueiPageState extends State<ChegueiPage> {
 
   Widget pageInformation(
       BuildContext context, AsyncSnapshot<Agendamento> snapshot) {
-    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+    int? tipo = snapshot.data?.tipo ?? 0;
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       const SizedBox(height: 20),
       const Text("Cheguei",
@@ -69,13 +69,15 @@ class _ChegueiPageState extends State<ChegueiPage> {
             IconButton(
               icon: const Icon(Icons.calendar_month),
               onPressed: () {
-                //TODO
+                agendamentoController.createEvent(
+                    snapshot.data!.dataAgendada, snapshot.data!.destino);
               },
             ),
             IconButton(
               icon: const Icon(Icons.share),
-              onPressed: () {
-                //TODO
+              onPressed: () async {
+                agendamentoController.shareMsg(
+                    context, snapshot.data!.dataAgendada);
               },
             ),
           ])),
@@ -84,7 +86,7 @@ class _ChegueiPageState extends State<ChegueiPage> {
           width: MediaQuery.of(context).size.width / 1.2,
           height: MediaQuery.of(context).size.height / 2.5,
           decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-          child: const Column(
+          child: Column(
             children: [
               SizedBox(height: 10),
               Align(
@@ -93,10 +95,7 @@ class _ChegueiPageState extends State<ChegueiPage> {
                       style: TextStyle(fontSize: 20))),
               Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                      dateFormat.format(snapshot.data != null
-                          ? snapshot.data.dataAgendada
-                          : DateTime.now()),
+                  child: Text(snapshot.data?.dataAgendada ?? "",
                       style: TextStyle(fontSize: 20))),
               SizedBox(height: 10),
               Align(
@@ -105,7 +104,8 @@ class _ChegueiPageState extends State<ChegueiPage> {
                       style: TextStyle(fontSize: 20))),
               Align(
                   alignment: Alignment.centerLeft,
-                  child: Text("AAA1111", style: TextStyle(fontSize: 20))),
+                  child: Text(snapshot.data?.placa ?? "",
+                      style: TextStyle(fontSize: 20))),
               SizedBox(height: 10),
               Align(
                   alignment: Alignment.centerLeft,
@@ -113,15 +113,15 @@ class _ChegueiPageState extends State<ChegueiPage> {
                       style: TextStyle(fontSize: 20))),
               Align(
                   alignment: Alignment.centerLeft,
-                  child: Text("AAA1111", style: TextStyle(fontSize: 20))),
+                  child: Text(snapshot.data?.carreta ?? "",
+                      style: TextStyle(fontSize: 20))),
               SizedBox(height: 10),
               Align(
                   alignment: Alignment.centerLeft,
                   child: Text("Nota Fiscal:", style: TextStyle(fontSize: 20))),
               Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                      "44444444444444444444444444444444444444444444444444444",
+                  child: Text(snapshot.data?.notaFiscal ?? "",
                       style: TextStyle(fontSize: 20))),
               SizedBox(height: 10),
               Align(
@@ -129,7 +129,8 @@ class _ChegueiPageState extends State<ChegueiPage> {
                   child: Text("Tipo:", style: TextStyle(fontSize: 20))),
               Align(
                   alignment: Alignment.centerLeft,
-                  child: Text("Carga", style: TextStyle(fontSize: 20))),
+                  child: Text(tipo == 0 ? "Carga" : "Descarga",
+                      style: TextStyle(fontSize: 20))),
             ],
           )),
       const SizedBox(height: 20),
@@ -140,7 +141,14 @@ class _ChegueiPageState extends State<ChegueiPage> {
                 width: MediaQuery.of(context).size.width / 3,
                 height: MediaQuery.of(context).size.height / 15,
                 child: FilledButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EditarAgendamentoPage(
+                              agendamento: snapshot.data!)),
+                    );
+                  },
                   style: FilledButton.styleFrom(
                       textStyle: const TextStyle(fontSize: 20),
                       backgroundColor: const Color.fromARGB(255, 44, 44, 216)),
@@ -156,7 +164,46 @@ class _ChegueiPageState extends State<ChegueiPage> {
                 width: MediaQuery.of(context).size.width / 3,
                 height: MediaQuery.of(context).size.height / 15,
                 child: FilledButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                                title: const Text('Cancelar agendamento'),
+                                content: const Text(
+                                    "A ação de cancelar o agendamento é irreversivel"),
+                                actions: <Widget>[
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge,
+                                    ),
+                                    child: const Text('Cancelar'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge,
+                                    ),
+                                    child: const Text('Prosseguir'),
+                                    onPressed: () async {
+                                      if (await agendamentoController.cancel(
+                                          id: snapshot.data!.id)) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const MenuPage()),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ]));
+                  },
                   style: FilledButton.styleFrom(
                       textStyle: const TextStyle(fontSize: 20),
                       backgroundColor: const Color.fromARGB(255, 247, 0, 0)),

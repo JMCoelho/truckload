@@ -62,11 +62,21 @@ class AgendamentoController extends Controller
 		return response()->json($agendamento);
 	}
 
+	public function hasAgendamentoAtivo(Request $request)
+	{
+		$data = $request->all();
+		$agendamento =
+		   Agendamento::where("user_id", $data["user_id"])->where("status", 0)
+			->orderBy('id', 'desc')->first();
+		return response()->json($agendamento);
+	}
+
 	/**
 	 * Update the specified resource in storage.
 	 */
 	public function update(Request $request)
 	{
+		$all = $request->all();
 		$data = $request->all(['carreta', "nota_fiscal"]);
 		$id = $request->only(['id']);
 

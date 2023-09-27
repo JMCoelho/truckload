@@ -18,7 +18,7 @@ class Agendamento {
   int tipo;
 
   String userId;
-  DateTime dataAgendada;
+  String dataAgendada;
   int status;
 
   Agendamento({
@@ -40,9 +40,9 @@ class Agendamento {
       notaFiscal: json["nota_fiscal"],
       destino: json["destino"],
       userId: json["user_id"],
-      dataAgendada: DateTime.parse(json["data_agendada"]),
-      status: json["status"],
-      tipo: json["tipo"]);
+      dataAgendada: json["data_agendada"],
+      status: int.parse(json["status"]),
+      tipo: int.parse(json["tipo"]));
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -51,7 +51,7 @@ class Agendamento {
         "nota_fiscal": notaFiscal,
         "destino": destino,
         "user_id": userId,
-        "data_agendada": dataAgendada.toIso8601String(),
+        "data_agendada": dataAgendada,
         "status": status,
         "tipo": tipo
       };

@@ -18,8 +18,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final String assetName = 'assets/img/logo.svg';
-
+    const String assetName = 'assets/img/logo.svg';
     return Scaffold(
         body: SingleChildScrollView(
             child: Center(
