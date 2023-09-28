@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Agendamento;
 use App\Models\Caminhao;
 use App\Http\Controllers\Controller;
+use App\Models\Movimentacao;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -62,13 +63,27 @@ class AgendamentoController extends Controller
 		return response()->json($agendamento);
 	}
 
-	public function hasAgendamentoAtivo(Request $request)
+	public function hasOperacaoAtiva(Request $request)
 	{
 		$data = $request->all();
 		$agendamento =
 		   Agendamento::where("user_id", $data["user_id"])->where("status", 0)
 			->orderBy('id', 'desc')->first();
-		return response()->json($agendamento);
+		
+		if(isset($agendamento))
+		{
+			return response()->json(["operacao" => "agendamento"]);
+		}
+
+		$movimentacao =
+			Movimentacao::where("user_id", $data["user_id"])->where("saida", null)
+			 ->orderBy('id', 'desc')->first();
+		
+		if(isset($movimentacao["id"]))
+		{
+			return response()->json(["operacao" => "movimentacao"]);
+		}
+		return response()->json(["operacao" => ""]);
 	}
 
 	/**

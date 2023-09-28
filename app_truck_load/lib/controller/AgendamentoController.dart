@@ -119,15 +119,15 @@ class AgendamentoController {
     return ok;
   }
 
-  Future<bool> hasAgendamento() async {
+  Future<String> hasAgendamento() async {
     var userId = await secureStorage.read(key: "CURRENT_USER_ID") ?? "0";
-    bool hasAgendamento = false;
+    String hasAgendamento = "";
     try {
       var response = await hasAgendamentoAtivo(userId: int.parse(userId));
 
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
-        hasAgendamento = data != null;
+        hasAgendamento = data["operacao"];
       } else {
         throw Exception("Deu ruim");
       }

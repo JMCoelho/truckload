@@ -78,6 +78,23 @@ return [
             'sslmode' => 'prefer',
         ],
 
+
+
+        // 'sqlsrv' => [
+        //     'driver' => 'sqlsrv',
+        //     'url' => env('DATABASE_URL'),
+        //     'host' => "truckload.cf7qdillmyg3.us-east-2.rds.amazonaws.com\\EGATES",
+        //     'port' => '1433',
+        //     'database' => "truckload",
+        //     'username' => "sa",
+        //     'password' => "bliveti10",
+        //     'charset' => 'utf8',
+        //     'prefix' => '',
+        //     'prefix_indexes' => true,
+        //     // 'encrypt' => env('DB_ENCRYPT', 'yes'),
+        //     // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
+        // ],
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),

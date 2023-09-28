@@ -34,11 +34,13 @@ Route::group(["middleware" => ["jwt"]], function(){
 	Route::post("caminhao/update", [CaminhaoController::class, "update"]);
 	Route::post("caminhao/destroy", [CaminhaoController::class, "destroy"]);
 	
+	Route::post("agendamento/hasOperacaoAtiva", [AgendamentoController::class, "hasOperacaoAtiva"]);
 	Route::post("agendamento/store", [AgendamentoController::class, "store"]);
 	Route::post("agendamento/show", [AgendamentoController::class, "show"]);
 	Route::post("agendamento/update", [AgendamentoController::class, "update"]);
 	Route::post("agendamento/cancel", [AgendamentoController::class, "cancel"]);
 
+	Route::post("movimentacao/show", [MovimentacaoController::class, "show"]);
 	Route::post("movimentacao/store", [MovimentacaoController::class, "store"]);
 	Route::post("movimentacao/update", [MovimentacaoController::class, "update"]);
 	

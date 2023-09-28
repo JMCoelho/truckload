@@ -10,39 +10,41 @@ Movimentacao movimentacaoFromJson(String str) =>
 String movimentacaoToJson(Movimentacao data) => json.encode(data.toJson());
 
 class Movimentacao {
-  DateTime entrada;
-  DateTime entradaFabrica;
-  DateTime entradaCarregamento;
-  DateTime saidaCarregamento;
-  DateTime saidaFabrica;
-  DateTime saida;
-  int agendamentoId;
-  int caminhaoId;
-  int userId;
+  String? entrada;
+  String? entradaFabrica;
+  String? entradaCarregamento;
+  String? saidaCarregamento;
+  String? saidaFabrica;
+  String? saida;
+  int? agendamentoId;
+  int? caminhaoId;
+  int? userId;
+  int? id;
 
   Movimentacao({
-    required this.entrada,
-    required this.entradaFabrica,
-    required this.entradaCarregamento,
-    required this.saidaCarregamento,
-    required this.saidaFabrica,
-    required this.saida,
-    required this.agendamentoId,
-    required this.caminhaoId,
-    required this.userId,
+    this.id,
+    this.agendamentoId,
+    this.caminhaoId,
+    this.userId,
+    this.entrada,
+    this.entradaFabrica,
+    this.entradaCarregamento,
+    this.saidaCarregamento,
+    this.saidaFabrica,
+    this.saida,
   });
 
   factory Movimentacao.fromJson(Map<String, dynamic> json) => Movimentacao(
-        entrada: DateTime.parse(json["entrada"]),
-        entradaFabrica: DateTime.parse(json["entrada_fabrica"]),
-        entradaCarregamento: DateTime.parse(json["entrada_carregamento"]),
-        saidaCarregamento: DateTime.parse(json["saida_carregamento"]),
-        saidaFabrica: DateTime.parse(json["saida_fabrica"]),
-        saida: DateTime.parse(json["saida"]),
-        agendamentoId: json["agendamento_id"],
-        caminhaoId: json["caminhao_id"],
-        userId: json["user_id"],
-      );
+      entrada: json["entrada"],
+      entradaFabrica: json["entrada_fabrica"],
+      entradaCarregamento: json["entrada_carregamento"],
+      saidaCarregamento: json["saida_carregamento"],
+      saidaFabrica: json["saida_fabrica"],
+      saida: json["saida"],
+      agendamentoId: int.parse(json["agendamento_id"]),
+      caminhaoId: int.parse(json["caminhao_id"]),
+      userId: int.parse(json["user_id"]),
+      id: json["id"]);
 
   Map<String, dynamic> toJson() => {
         "entrada": entrada,

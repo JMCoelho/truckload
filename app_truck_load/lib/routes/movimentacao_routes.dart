@@ -1,37 +1,56 @@
 import 'dart:convert';
-import 'package:app_truck_load/model/movimentacao_model.dart';
 import 'package:app_truck_load/utilities/consts.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
-Future<Movimentacao> movimentacaoStore() async {
-  const urlMovimentacao = "movimentacao/store";
+import '../model/agendamento_model.dart';
+import '../model/movimentacao_model.dart';
 
-  final response = await http.post(Uri.parse(Consts.url + urlMovimentacao));
+const secureStorage = FlutterSecureStorage();
 
-  if (response.statusCode == 200) {
-    var data = json.decode(response.body);
-    if (!data.sucesso) {
-      return Movimentacao.fromJson(data.movimentacao);
-    } else {
-      throw Exception(data.mensagem);
-    }
-  } else {
-    throw Exception("Deu ruim");
-  }
+Future<Response> movimentacaoShow({required int userId}) async {
+  const urlCaminhao = "movimentacao/show";
+
+  var token = await secureStorage.read(key: "CURRENT_USER_TOKEN") ?? "";
+  Map<String, String> requestHeaders = {
+    'Content-type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': "Bearer $token"
+  };
+
+  return await http.post(Uri.parse(Consts.url + urlCaminhao),
+      headers: requestHeaders, body: json.encode({"user_id": userId}));
 }
 
-Future movimentacaoUpdate() async {
-  const urlMovimentacao = "Movimentacao/update";
+Future<Response> movimentacaoStore({
+  required Agendamento? agendamento,
+}) async {
+  const urlMovimentacao = "movimentacao/store";
 
-  final response = await http.post(Uri.parse(Consts.url + urlMovimentacao));
+  var token = await secureStorage.read(key: "CURRENT_USER_TOKEN") ?? "";
+  Map<String, String> requestHeaders = {
+    'Content-type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': "Bearer $token"
+  };
 
-  if (response.statusCode == 200) {
-    var data = json.decode(response.body);
-    if (!data.sucesso) {
-      throw Exception(data.mensagem);
-    }
-  } else {
-    throw Exception("Deu ruim");
-  }
+  return await http.post(Uri.parse(Consts.url + urlMovimentacao),
+      headers: requestHeaders, body: json.encode(agendamento!.toJson()));
+}
+
+Future<Response> movimentacaoUpdate(
+    {required Movimentacao movimentacao}) async {
+  const urlMovimentacao = "movimentacao/update";
+
+  var token = await secureStorage.read(key: "CURRENT_USER_TOKEN") ?? "";
+  Map<String, String> requestHeaders = {
+    'Content-type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': "Bearer $token"
+  };
+
+  return await http.post(Uri.parse(Consts.url + urlMovimentacao),
+      headers: requestHeaders, body: json.encode({"id": movimentacao.id}));
 }

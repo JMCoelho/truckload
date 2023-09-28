@@ -1,5 +1,6 @@
 import 'package:app_truck_load/view/cheguei_page.dart';
 import 'package:app_truck_load/view/side_bar_menu.dart';
+import 'package:app_truck_load/view/status_operacao_page.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/AgendamentoController.dart';
@@ -37,11 +38,18 @@ class _MenuPageState extends State<MenuPage> {
                   height: MediaQuery.of(context).size.height / 12,
                   child: FilledButton(
                     onPressed: () async {
-                      if (await agendamentoController.hasAgendamento()) {
+                      String page =
+                          await agendamentoController.hasAgendamento();
+                      if (page == "agendamento") {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ChegueiPage()));
+                      } else if (page == "movimentacao") {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => StatusOpercaoPage()));
                       } else {
                         Navigator.push(
                             context,

@@ -24,7 +24,7 @@ Future<Response> agendamentoShow({required int userId}) async {
 }
 
 Future<Response> hasAgendamentoAtivo({required int userId}) async {
-  const urlCaminhao = "agendamento/show";
+  const urlCaminhao = "agendamento/hasOperacaoAtiva";
 
   var token = await secureStorage.read(key: "CURRENT_USER_TOKEN") ?? "";
   Map<String, String> requestHeaders = {

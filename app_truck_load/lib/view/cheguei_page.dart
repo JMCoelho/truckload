@@ -3,6 +3,7 @@ import 'package:app_truck_load/view/status_operacao_page.dart';
 import 'package:flutter/material.dart';
 
 import '../controller/AgendamentoController.dart';
+import '../controller/MovimentacoesController.dart';
 import '../model/agendamento_model.dart';
 import 'editar_agendamento_page.dart';
 import 'menu_page.dart';
@@ -17,6 +18,7 @@ class ChegueiPage extends StatefulWidget {
 class _ChegueiPageState extends State<ChegueiPage> {
   TextEditingController controller = TextEditingController();
   AgendamentoController agendamentoController = AgendamentoController();
+  MovimentacoesController movimentacaoController = MovimentacoesController();
 
   int? cargaDescarga = 0;
 
@@ -221,12 +223,26 @@ class _ChegueiPageState extends State<ChegueiPage> {
           width: MediaQuery.of(context).size.width / 1.35,
           height: MediaQuery.of(context).size.height / 10,
           child: FilledButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const StatusOpercaoPage()),
-              );
+            onPressed: () async {
+              if (await movimentacaoController.addMovimentacao(
+                  agendamento: snapshot.data)) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const StatusOpercaoPage()),
+                );
+              } else {
+                showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Falha ao entrar na unidade'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'OK'),
+                                child: const Text('Cancel'),
+                              ),
+                            ]));
+              }
             },
             style: FilledButton.styleFrom(
                 textStyle: const TextStyle(fontSize: 20),
