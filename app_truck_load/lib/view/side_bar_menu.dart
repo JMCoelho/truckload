@@ -1,12 +1,19 @@
+import 'package:app_truck_load/view/status_operacao_page.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 
+import '../controller/AgendamentoController.dart';
 import '../controller/LoginController.dart';
 import 'agendar_page.dart';
 import 'caminhao_list_page.dart';
+import 'cheguei_page.dart';
 import 'login_page.dart';
 
 class SideBarMenu extends StatelessWidget {
   LoginController loginController = LoginController();
+
+  SideBarMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +33,7 @@ class SideBarMenu extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.paste),
             title: Text('Agendar'),
-            onTap: () => {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const AgendarPage()))
-            },
+            onTap: () async => {await operacaoRedirect(context)},
           ),
           ListTile(
             leading: Icon(Icons.fire_truck),
@@ -40,6 +44,11 @@ class SideBarMenu extends StatelessWidget {
                   MaterialPageRoute(
                       builder: (context) => const CaminhaoListPage()))
             },
+          ),
+          ListTile(
+            leading: Icon(Icons.chat),
+            title: Text('Fale Conosco'),
+            onTap: () async => {await launchWhatsAppUri()},
           ),
           ListTile(
             leading: Icon(Icons.exit_to_app),
@@ -70,5 +79,31 @@ class SideBarMenu extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  operacaoRedirect(BuildContext context) async {
+    AgendamentoController agendamentoController = AgendamentoController();
+
+    String page = await agendamentoController.hasAgendamento();
+    if (page == "agendamento") {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const ChegueiPage()));
+    } else if (page == "movimentacao") {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const StatusOpercaoPage()));
+    } else {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const AgendarPage()));
+    }
+  }
+
+  launchWhatsAppUri() async {
+    final link = WhatsAppUnilink(
+      phoneNumber: '+55 21 9999-9999',
+      text: "Olá, preciso de ajuda com o truckload :)",
+    );
+    // Convert the WhatsAppUnilink instance to a Uri.
+    // The "launch" method is part of "url_launcher".
+    await launchUrlString('$link');
   }
 }

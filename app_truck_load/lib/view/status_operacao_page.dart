@@ -51,7 +51,7 @@ class _StatusOpercaoPageState extends State<StatusOpercaoPage> {
       BuildContext context, AsyncSnapshot<Movimentacao> snapshot) {
     const String assetElipseName = 'img/elipse.svg';
     const String assetFilledElipseName = 'img/filled_elipse.svg';
-
+    String buttonText = chooseButtonText(snapshot);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -190,16 +190,23 @@ class _StatusOpercaoPageState extends State<StatusOpercaoPage> {
             height: MediaQuery.of(context).size.height / 15,
             child: FilledButton(
               onPressed: () async {
-                await movimentacaoController.updateMovimentacao(
-                    movimentacao: snapshot.data!);
-                setState(() {});
+                if (buttonText == "Finalizar") {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MenuPage()));
+                } else {
+                  await movimentacaoController.updateMovimentacao(
+                      movimentacao: snapshot.data!);
+                  setState(() {});
+                }
               },
               style: FilledButton.styleFrom(
                   textStyle: const TextStyle(fontSize: 20),
                   backgroundColor: const Color.fromARGB(255, 44, 44, 216)),
-              child: const FittedBox(
+              child: FittedBox(
                   fit: BoxFit.fitWidth,
-                  child: Text("Entrar na unidade",
+                  child: Text(buttonText,
                       style: TextStyle(
                         fontFamily: "Lalezar",
                         fontSize: 30,
@@ -207,5 +214,21 @@ class _StatusOpercaoPageState extends State<StatusOpercaoPage> {
             )),
       ],
     );
+  }
+
+  String chooseButtonText(AsyncSnapshot<Movimentacao> snapshot) {
+    if (snapshot.data!.entradaFabrica == null) {
+      return "Entrar na fábrica";
+    } else if (snapshot.data!.entradaCarregamento == null) {
+      return "Iniciar Carregamento";
+    } else if (snapshot.data!.saidaCarregamento == null) {
+      return "Finalizar Carregamento";
+    } else if (snapshot.data!.saidaFabrica == null) {
+      return "Sair da Fábrica";
+    } else if (snapshot.data!.saida == null) {
+      return "Sair da unidade";
+    } else {
+      return "Finalizar";
+    }
   }
 }
