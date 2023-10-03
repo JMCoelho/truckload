@@ -1,4 +1,3 @@
 class Consts {
-  static const url =
-      "http://localhost/app/backend/app-truckload-backend/public/api/";
+  static const url = "http://18.118.129.161/app-truckload-backend/public/api/";
 }

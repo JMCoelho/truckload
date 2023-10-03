@@ -1,5 +1,6 @@
 import 'package:app_truck_load/view/side_bar_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../controller/MovimentacoesController.dart';
@@ -34,6 +35,7 @@ class _StatusOpercaoPageState extends State<StatusOpercaoPage> {
                   builder: (BuildContext context,
                       AsyncSnapshot<Movimentacao> snapshot) {
                     try {
+                      EasyLoading.dismiss();
                       if (snapshot.hasData) {
                         return pageInformation(context, snapshot);
                       } else {
@@ -49,8 +51,6 @@ class _StatusOpercaoPageState extends State<StatusOpercaoPage> {
 
   Widget pageInformation(
       BuildContext context, AsyncSnapshot<Movimentacao> snapshot) {
-    const String assetElipseName = 'img/elipse.svg';
-    const String assetFilledElipseName = 'img/filled_elipse.svg';
     String buttonText = chooseButtonText(snapshot);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -63,133 +63,134 @@ class _StatusOpercaoPageState extends State<StatusOpercaoPage> {
                 color: Color.fromARGB(255, 44, 44, 216))),
         const SizedBox(height: 70),
         SizedBox(
-          height: MediaQuery.of(context).size.height / 2,
-          child: Column(
-            children: [
-              Align(
-                  alignment: Alignment.centerLeft,
-                  child: Wrap(
-                    spacing: 10,
-                    alignment: WrapAlignment.start,
-                    children: [
-                      SvgPicture.asset(snapshot.data?.saida != null
-                          ? assetFilledElipseName
-                          : assetElipseName),
-                      Text("Saida da unidade: ",
-                          style: TextStyle(
-                            fontSize: 18,
-                          )),
-                      Text(snapshot.data!.saida ?? "",
-                          style: TextStyle(
-                            fontSize: 18,
-                          ))
-                    ],
-                  )),
-              const SizedBox(height: 30),
-              Align(
-                  alignment: Alignment.centerLeft,
-                  child: Wrap(
-                    spacing: 10,
-                    children: [
-                      SvgPicture.asset(snapshot.data?.saidaFabrica != null
-                          ? assetFilledElipseName
-                          : assetElipseName),
-                      Text("Saida da fábrica: ",
-                          style: TextStyle(
-                            fontSize: 18,
-                          )),
-                      Text(snapshot.data!.saidaFabrica ?? "",
-                          style: TextStyle(
-                            fontSize: 18,
-                          ))
-                    ],
-                  )),
-              const SizedBox(height: 30),
-              Align(
-                  alignment: Alignment.centerLeft,
-                  child: Wrap(
-                    spacing: 10,
-                    children: [
-                      SvgPicture.asset(snapshot.data?.saidaCarregamento != null
-                          ? assetFilledElipseName
-                          : assetElipseName),
-                      Text("Fim da carga/descarga: ",
-                          style: TextStyle(
-                            fontSize: 18,
-                          )),
-                      Text(snapshot.data!.saidaCarregamento ?? "",
-                          style: TextStyle(
-                            fontSize: 18,
-                          ))
-                    ],
-                  )),
-              const SizedBox(height: 30),
-              Align(
-                  alignment: Alignment.centerLeft,
-                  child: Wrap(
-                    spacing: 10,
-                    children: [
-                      SvgPicture.asset(
-                          snapshot.data?.entradaCarregamento != null
-                              ? assetFilledElipseName
-                              : assetElipseName),
-                      Text("Inicio da carga/descarga: ",
-                          style: TextStyle(
-                            fontSize: 18,
-                          )),
-                      Text(snapshot.data!.entradaCarregamento ?? "",
-                          style: TextStyle(
-                            fontSize: 18,
-                          ))
-                    ],
-                  )),
-              const SizedBox(height: 30),
-              Align(
-                  alignment: Alignment.centerLeft,
-                  child: Wrap(
-                    spacing: 10,
-                    children: [
-                      SvgPicture.asset(snapshot.data?.entradaFabrica != null
-                          ? assetFilledElipseName
-                          : assetElipseName),
-                      Text("Entrada na fábrica: ",
-                          style: TextStyle(
-                            fontSize: 18,
-                          )),
-                      Text(snapshot.data!.entradaFabrica ?? "",
-                          style: TextStyle(
-                            fontSize: 18,
-                          ))
-                    ],
-                  )),
-              const SizedBox(height: 30),
-              Align(
-                  alignment: Alignment.centerLeft,
-                  child: Wrap(
-                    spacing: 10,
-                    children: [
-                      SvgPicture.asset(snapshot.data?.entrada != null
-                          ? assetFilledElipseName
-                          : assetElipseName),
-                      Text("Entrada na unidade: ",
-                          style: TextStyle(
-                            fontSize: 18,
-                          )),
-                      Text(snapshot.data!.entrada ?? "",
-                          style: TextStyle(
-                            fontSize: 18,
-                          ))
-                    ],
-                  )),
-            ],
-          ),
-        ),
-        SizedBox(height: 100),
+            height: MediaQuery.of(context).size.height / 2,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Wrap(
+                        spacing: 10,
+                        alignment: WrapAlignment.start,
+                        children: [
+                          Icon(snapshot.data?.saida != null
+                              ? Icons.radio_button_on_outlined
+                              : Icons.radio_button_off_outlined),
+                          Text("Saida da unidade: ",
+                              style: TextStyle(
+                                fontSize: 18,
+                              )),
+                          Text(snapshot.data!.saida ?? "",
+                              style: TextStyle(
+                                fontSize: 18,
+                              ))
+                        ],
+                      )),
+                  const SizedBox(height: 30),
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Wrap(
+                        spacing: 10,
+                        children: [
+                          Icon(snapshot.data?.saidaFabrica != null
+                              ? Icons.radio_button_on_outlined
+                              : Icons.radio_button_off_outlined),
+                          Text("Saida da fábrica: ",
+                              style: TextStyle(
+                                fontSize: 18,
+                              )),
+                          Text(snapshot.data!.saidaFabrica ?? "",
+                              style: TextStyle(
+                                fontSize: 18,
+                              ))
+                        ],
+                      )),
+                  const SizedBox(height: 30),
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Wrap(
+                        spacing: 10,
+                        children: [
+                          Icon(snapshot.data?.saidaCarregamento != null
+                              ? Icons.radio_button_on_outlined
+                              : Icons.radio_button_off_outlined),
+                          Text("Fim da carga/descarga: ",
+                              style: TextStyle(
+                                fontSize: 18,
+                              )),
+                          Text(snapshot.data!.saidaCarregamento ?? "",
+                              style: TextStyle(
+                                fontSize: 18,
+                              ))
+                        ],
+                      )),
+                  const SizedBox(height: 30),
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Wrap(
+                        spacing: 10,
+                        children: [
+                          Icon(snapshot.data?.entradaCarregamento != null
+                              ? Icons.radio_button_on_outlined
+                              : Icons.radio_button_off_outlined),
+                          Text("Inicio da carga/descarga: ",
+                              style: TextStyle(
+                                fontSize: 18,
+                              )),
+                          Text(snapshot.data!.entradaCarregamento ?? "",
+                              style: TextStyle(
+                                fontSize: 18,
+                              ))
+                        ],
+                      )),
+                  const SizedBox(height: 30),
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Wrap(
+                        spacing: 10,
+                        children: [
+                          Icon(snapshot.data?.entradaFabrica != null
+                              ? Icons.radio_button_on_outlined
+                              : Icons.radio_button_off_outlined),
+                          Text("Entrada na fábrica: ",
+                              style: TextStyle(
+                                fontSize: 18,
+                              )),
+                          Text(snapshot.data!.entradaFabrica ?? "",
+                              style: TextStyle(
+                                fontSize: 18,
+                              ))
+                        ],
+                      )),
+                  const SizedBox(height: 30),
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: Wrap(
+                        spacing: 10,
+                        children: [
+                          Icon(snapshot.data?.entrada != null
+                              ? Icons.radio_button_on_outlined
+                              : Icons.radio_button_off_outlined),
+                          Text("Entrada na unidade: ",
+                              style: TextStyle(
+                                fontSize: 18,
+                              )),
+                          Text(snapshot.data!.entrada ?? "",
+                              style: TextStyle(
+                                fontSize: 18,
+                              ))
+                        ],
+                      )),
+                ],
+              ),
+            )),
+        SizedBox(height: 40),
         SizedBox(
             width: MediaQuery.of(context).size.width / 1.35,
             height: MediaQuery.of(context).size.height / 15,
             child: FilledButton(
               onPressed: () async {
+                EasyLoading.show(status: 'loading...');
                 if (buttonText == "Finalizar") {
                   Navigator.push(
                       context,
@@ -198,6 +199,7 @@ class _StatusOpercaoPageState extends State<StatusOpercaoPage> {
                 } else {
                   await movimentacaoController.updateMovimentacao(
                       movimentacao: snapshot.data!);
+                  EasyLoading.dismiss();
                   setState(() {});
                 }
               },

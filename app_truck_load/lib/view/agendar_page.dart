@@ -1,6 +1,7 @@
 import 'package:app_truck_load/controller/AgendamentoController.dart';
 import 'package:app_truck_load/view/side_bar_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 import 'cheguei_page.dart';
@@ -46,6 +47,8 @@ class _AgendarPageState extends State<AgendarPage> {
                         color: Color.fromARGB(255, 44, 44, 216))),
                 SizedBox(height: 50),
                 TextField(
+                  maxLength: 7,
+                  textCapitalization: TextCapitalization.characters,
                   onChanged: (text) {
                     placa = text;
                   },
@@ -55,6 +58,8 @@ class _AgendarPageState extends State<AgendarPage> {
                 ),
                 SizedBox(height: 20),
                 TextField(
+                  maxLength: 7,
+                  textCapitalization: TextCapitalization.characters,
                   onChanged: (text) {
                     carreta = text;
                   },
@@ -76,7 +81,9 @@ class _AgendarPageState extends State<AgendarPage> {
                     dataAgendada = text;
                   },
                   decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: "Data"),
+                      border: OutlineInputBorder(),
+                      labelText: "Data",
+                      hintText: "YYYY-MM-DD HH:MM:SS"),
                 ),
                 const SizedBox(height: 20),
                 TextField(
@@ -141,6 +148,7 @@ class _AgendarPageState extends State<AgendarPage> {
                     height: MediaQuery.of(context).size.height / 10,
                     child: FilledButton(
                       onPressed: () async {
+                        EasyLoading.show(status: 'loading...');
                         if (await agendamentoController.addAgendamento(
                             placa: placa,
                             placaCarreta: carreta,
@@ -153,6 +161,22 @@ class _AgendarPageState extends State<AgendarPage> {
                             MaterialPageRoute(
                                 builder: (context) => ChegueiPage()),
                           );
+                        } else {
+                          EasyLoading.dismiss();
+                          showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                      title: const Text(
+                                          'Falha ao salvar caminhão'),
+                                      content: const Text(
+                                          "Tente novamente mais tarde.\nLembrando que só é possivel realizar\ncheckin para os caminhões\nadicionados para o atual usuario"),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context, 'OK'),
+                                          child: const Text('Cancel'),
+                                        ),
+                                      ]));
                         }
                       },
                       child: FittedBox(

@@ -1,6 +1,7 @@
 import 'package:app_truck_load/view/side_bar_menu.dart';
 import 'package:app_truck_load/view/status_operacao_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../controller/AgendamentoController.dart';
 import '../controller/MovimentacoesController.dart';
@@ -39,6 +40,7 @@ class _ChegueiPageState extends State<ChegueiPage> {
                   builder: (BuildContext context,
                       AsyncSnapshot<Agendamento> snapshot) {
                     try {
+                      EasyLoading.dismiss();
                       if (snapshot.hasData) {
                         return pageInformation(context, snapshot);
                       } else {
@@ -88,7 +90,8 @@ class _ChegueiPageState extends State<ChegueiPage> {
           width: MediaQuery.of(context).size.width / 1.2,
           height: MediaQuery.of(context).size.height / 2.5,
           decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-          child: Column(
+          child: SingleChildScrollView(
+              child: Column(
             children: [
               SizedBox(height: 10),
               Align(
@@ -134,7 +137,7 @@ class _ChegueiPageState extends State<ChegueiPage> {
                   child: Text(tipo == 0 ? "Carga" : "Descarga",
                       style: TextStyle(fontSize: 20))),
             ],
-          )),
+          ))),
       const SizedBox(height: 20),
       Align(
           alignment: Alignment.center,
@@ -193,14 +196,33 @@ class _ChegueiPageState extends State<ChegueiPage> {
                                     ),
                                     child: const Text('Prosseguir'),
                                     onPressed: () async {
+                                      EasyLoading.show(status: 'loading...');
                                       if (await agendamentoController.cancel(
                                           id: snapshot.data!.id)) {
+                                        EasyLoading.dismiss();
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   const MenuPage()),
                                         );
+                                      } else {
+                                        EasyLoading.dismiss();
+                                        showDialog<String>(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                AlertDialog(
+                                                    title: const Text(
+                                                        'Falha ao cancelar Agendamento'),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                context, 'OK'),
+                                                        child: const Text(
+                                                            'Cancel'),
+                                                      ),
+                                                    ]));
                                       }
                                     },
                                   ),
@@ -224,6 +246,7 @@ class _ChegueiPageState extends State<ChegueiPage> {
           height: MediaQuery.of(context).size.height / 10,
           child: FilledButton(
             onPressed: () async {
+              EasyLoading.show(status: 'loading...');
               if (await movimentacaoController.addMovimentacao(
                   agendamento: snapshot.data)) {
                 Navigator.push(
@@ -232,6 +255,7 @@ class _ChegueiPageState extends State<ChegueiPage> {
                       builder: (context) => const StatusOpercaoPage()),
                 );
               } else {
+                EasyLoading.dismiss();
                 showDialog<String>(
                     context: context,
                     builder: (BuildContext context) => AlertDialog(

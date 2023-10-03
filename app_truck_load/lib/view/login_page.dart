@@ -1,5 +1,6 @@
 import 'package:app_truck_load/controller/LoginController.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'menu_page.dart';
@@ -57,6 +58,7 @@ class _LoginPageState extends State<LoginPage> {
               child: FilledButton(
                 onPressed: () async {
                   if (login != "" || senha != "") {
+                    EasyLoading.show(status: 'loading...');
                     if (await loginController.login(
                         login: login, senha: senha)) {
                       Navigator.push(
@@ -77,6 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                                   ]));
                     }
                   }
+                  EasyLoading.dismiss();
                 },
                 child: FittedBox(
                     fit: BoxFit.fitWidth,

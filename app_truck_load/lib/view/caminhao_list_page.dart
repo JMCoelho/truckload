@@ -39,27 +39,6 @@ class _CaminhaoListPageState extends State<CaminhaoListPage> {
                         fontSize: 30,
                         color: Color.fromARGB(255, 44, 44, 216))),
                 SizedBox(height: 20),
-                Wrap(
-                  spacing: 10,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 2,
-                      child: TextField(
-                        onChanged: (text) {
-                          text;
-                        },
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(), labelText: "Placa"),
-                      ),
-                    ),
-                    IconButton(
-                        onPressed: () {
-                          //TODO
-                        },
-                        icon: const Icon(Icons.search))
-                  ],
-                ),
-                SizedBox(height: 20),
                 SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height / 1.5,
@@ -110,38 +89,35 @@ class _CaminhaoListPageState extends State<CaminhaoListPage> {
     snapshot.data?.forEach((element) {
       var container = Container(
           width: MediaQuery.of(context).size.width / 1.2,
-          height: MediaQuery.of(context).size.height / 20,
+          height: MediaQuery.of(context).size.height / 15,
           decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-          child: Wrap(
-            alignment: WrapAlignment.center,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            spacing: 10,
-            children: [
-              Text(element.placa, style: TextStyle(fontSize: 30)),
-              OutlinedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              CaminhaoUpdatePage(caminhao: element)),
-                    );
-                  },
-                  style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: Colors.black45)),
-                  child: Icon(Icons.edit_document, color: Colors.black87)),
-              OutlinedButton(
-                  onPressed: () {
-                    _dialogDeleteBuilder(context, element.id);
-                  },
-                  style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: Colors.black87)),
-                  child: Icon(
-                    Icons.delete,
-                    color: Colors.black,
-                  ))
-            ],
-          ));
+          child: Align(
+              alignment: Alignment.topCenter,
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 10,
+                children: [
+                  Text(element.placa, style: TextStyle(fontSize: 30)),
+                  IconButton(
+                      icon: const Icon(Icons.edit_document,
+                          color: Colors.black87),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  CaminhaoUpdatePage(caminhao: element)),
+                        );
+                      }),
+                  IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.black87),
+                    onPressed: () {
+                      _dialogDeleteBuilder(context, element.id);
+                    },
+                  )
+                ],
+              )));
       var sizedbox = const SizedBox(height: 10);
 
       widgets.add(container);

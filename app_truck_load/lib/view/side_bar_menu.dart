@@ -1,5 +1,6 @@
 import 'package:app_truck_load/view/status_operacao_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 
@@ -53,28 +54,7 @@ class SideBarMenu extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),
-            onTap: () async => {
-              if (await loginController.logout())
-                {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                  )
-                }
-              else
-                {
-                  showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                              title: const Text('Falha para deslogar'),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context, 'OK'),
-                                  child: const Text('Cancel'),
-                                ),
-                              ]))
-                }
-            },
+            onTap: () async => {await logout(context)},
           ),
         ],
       ),
@@ -105,5 +85,28 @@ class SideBarMenu extends StatelessWidget {
     // Convert the WhatsAppUnilink instance to a Uri.
     // The "launch" method is part of "url_launcher".
     await launchUrlString('$link');
+  }
+
+  logout(BuildContext context) async {
+    EasyLoading.show(status: 'loading...');
+    if (await loginController.logout()) {
+      EasyLoading.dismiss();
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
+    } else {
+      EasyLoading.dismiss();
+      showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+                  title: const Text('Falha para deslogar'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'OK'),
+                      child: const Text('Cancel'),
+                    ),
+                  ]));
+    }
   }
 }

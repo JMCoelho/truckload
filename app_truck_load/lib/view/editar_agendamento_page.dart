@@ -1,6 +1,7 @@
 import 'package:app_truck_load/controller/AgendamentoController.dart';
 import 'package:app_truck_load/view/side_bar_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 import '../model/agendamento_model.dart';
@@ -56,7 +57,7 @@ class _EditarAgendamentoPageState extends State<EditarAgendamentoPage> {
                 TextField(
                   controller: nfController,
                   onChanged: (text) {
-                    nfController.text = text;
+                    widget.agendamento.notaFiscal = text;
                   },
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(), labelText: "Nota Fiscal"),
@@ -94,20 +95,27 @@ class _EditarAgendamentoPageState extends State<EditarAgendamentoPage> {
                     height: MediaQuery.of(context).size.height / 10,
                     child: FilledButton(
                       onPressed: () async {
-                        widget.agendamento.notaFiscal = nfController.text;
+                        EasyLoading.show(status: 'loading...');
+                        if (nfController.text != "") {
+                          widget.agendamento.notaFiscal = nfController.text;
+                        }
+
                         widget.agendamento.carreta = carretaController.text;
                         if (await agendamentoController.updateAgendamento(
                             agendamento: widget.agendamento)) {
+                          EasyLoading.dismiss();
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ChegueiPage()),
                           );
+                        } else {
+                          EasyLoading.dismiss();
                         }
                       },
                       child: FittedBox(
                           fit: BoxFit.fitWidth,
-                          child: Text("Agendar",
+                          child: Text("Atualizar",
                               style: TextStyle(
                                 fontFamily: "Lalezar",
                                 fontSize: 40,

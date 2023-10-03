@@ -1,5 +1,6 @@
 import 'package:app_truck_load/view/side_bar_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../controller/CaminhaoController.dart';
 import 'caminhao_list_page.dart';
@@ -40,8 +41,10 @@ class _CaminhaoPageState extends State<CaminhaoPage> {
                         color: Color.fromARGB(255, 44, 44, 216))),
                 SizedBox(height: 70),
                 TextField(
+                  maxLength: 7,
+                  textCapitalization: TextCapitalization.characters,
                   onChanged: (text) {
-                    placa = text;
+                    placa = text.toUpperCase();
                   },
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),
@@ -72,16 +75,19 @@ class _CaminhaoPageState extends State<CaminhaoPage> {
                       height: MediaQuery.of(context).size.height / 15,
                       child: FilledButton(
                         onPressed: () async {
+                          EasyLoading.show(status: 'loading...');
                           if (await caminhaoController.addCaminhao(
                               placa: placa,
                               transportadora: transportadora,
                               tipoCaminhao: tipoCaminhao)) {
+                            EasyLoading.dismiss();
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => CaminhaoListPage()),
                             );
                           } else {
+                            EasyLoading.dismiss();
                             showDialog<String>(
                                 context: context,
                                 builder: (BuildContext context) => AlertDialog(

@@ -2,6 +2,7 @@ import 'package:app_truck_load/view/cheguei_page.dart';
 import 'package:app_truck_load/view/side_bar_menu.dart';
 import 'package:app_truck_load/view/status_operacao_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../controller/AgendamentoController.dart';
 import 'agendar_page.dart';
@@ -19,6 +20,7 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   Widget build(BuildContext context) {
+    EasyLoading.dismiss();
     return Scaffold(
         drawer: SideBarMenu(),
         appBar: AppBar(
