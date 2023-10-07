@@ -1,19 +1,17 @@
 import 'dart:convert';
 import 'package:app_truck_load/utilities/consts.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 import '../model/agendamento_model.dart';
 import '../model/movimentacao_model.dart';
 
-const secureStorage = FlutterSecureStorage();
-
 Future<Response> movimentacaoShow({required int userId}) async {
   const urlCaminhao = "movimentacao/show";
 
-  var token = await secureStorage.read(key: "CURRENT_USER_TOKEN") ?? "";
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString("CURRENT_USER_TOKEN");
   Map<String, String> requestHeaders = {
     'Content-type': 'application/json',
     'Accept': 'application/json',
@@ -29,7 +27,8 @@ Future<Response> movimentacaoStore({
 }) async {
   const urlMovimentacao = "movimentacao/store";
 
-  var token = await secureStorage.read(key: "CURRENT_USER_TOKEN") ?? "";
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString("CURRENT_USER_TOKEN");
   Map<String, String> requestHeaders = {
     'Content-type': 'application/json',
     'Accept': 'application/json',
@@ -44,7 +43,8 @@ Future<Response> movimentacaoUpdate(
     {required Movimentacao movimentacao}) async {
   const urlMovimentacao = "movimentacao/update";
 
-  var token = await secureStorage.read(key: "CURRENT_USER_TOKEN") ?? "";
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString("CURRENT_USER_TOKEN");
   Map<String, String> requestHeaders = {
     'Content-type': 'application/json',
     'Accept': 'application/json',

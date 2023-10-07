@@ -1,17 +1,15 @@
 import 'dart:convert';
 import 'package:app_truck_load/model/caminhao_model.dart';
 import 'package:app_truck_load/utilities/consts.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-
-const secureStorage = FlutterSecureStorage();
 
 Future<Response> caminhaoList({required int userId}) async {
   const urlCaminhao = "caminhao/list";
 
-  var token = await secureStorage.read(key: "CURRENT_USER_TOKEN") ?? "";
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString("CURRENT_USER_TOKEN");
   Map<String, String> requestHeaders = {
     'Content-type': 'application/json',
     'Accept': 'application/json',
@@ -24,7 +22,8 @@ Future<Response> caminhaoList({required int userId}) async {
 
 Future<Response> caminhaoStore({required Caminhao caminhao}) async {
   const urlCaminhao = "caminhao/store";
-  var token = await secureStorage.read(key: "CURRENT_USER_TOKEN") ?? "";
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString("CURRENT_USER_TOKEN");
   Map<String, String> requestHeaders = {
     'Content-type': 'application/json',
     'Accept': 'application/json',
@@ -37,7 +36,8 @@ Future<Response> caminhaoStore({required Caminhao caminhao}) async {
 
 Future caminhaoUpdate({required Caminhao caminhao}) async {
   const urlCaminhao = "caminhao/update";
-  var token = await secureStorage.read(key: "CURRENT_USER_TOKEN") ?? "";
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString("CURRENT_USER_TOKEN");
   Map<String, String> requestHeaders = {
     'Content-type': 'application/json',
     'Accept': 'application/json',
@@ -50,7 +50,8 @@ Future caminhaoUpdate({required Caminhao caminhao}) async {
 
 Future<Response> caminhaoDestroy({required int id}) async {
   const urlCaminhao = "caminhao/destroy";
-  var token = await secureStorage.read(key: "CURRENT_USER_TOKEN") ?? "";
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString("CURRENT_USER_TOKEN");
   Map<String, String> requestHeaders = {
     'Content-type': 'application/json',
     'Accept': 'application/json',

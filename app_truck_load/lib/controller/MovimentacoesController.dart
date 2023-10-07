@@ -1,16 +1,15 @@
 import 'dart:convert';
 
 import 'package:app_truck_load/model/agendamento_model.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../model/movimentacao_model.dart';
 import '../routes/movimentacao_routes.dart';
 
 class MovimentacoesController {
-  static const secureStorage = FlutterSecureStorage();
-
-  Future<Movimentacao> show() async {
-    var userId = await secureStorage.read(key: "CURRENT_USER_ID") ?? "0";
+  static Future<Movimentacao> show() async {
+    final prefs = await SharedPreferences.getInstance();
+    var userId = prefs.getString("CURRENT_USER_ID") ?? "0";
+    ;
 
     Movimentacao movimentacao =
         Movimentacao(userId: 0, agendamentoId: 0, caminhaoId: 0, id: 0);

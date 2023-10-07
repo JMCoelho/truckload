@@ -31,7 +31,7 @@ class _StatusOpercaoPageState extends State<StatusOpercaoPage> {
           child: SizedBox(
               width: MediaQuery.of(context).size.width / 1.3,
               child: FutureBuilder<Movimentacao>(
-                  future: movimentacaoController.show(),
+                  future: MovimentacoesController.show(),
                   builder: (BuildContext context,
                       AsyncSnapshot<Movimentacao> snapshot) {
                     try {

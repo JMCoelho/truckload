@@ -1,15 +1,13 @@
 import 'dart:convert';
 
 import 'package:app_truck_load/model/caminhao_model.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../routes/caminhao_routes.dart';
 
 class CaminhaoController {
-  static const secureStorage = FlutterSecureStorage();
-
-  Future<List<Caminhao>> list() async {
-    var userId = await secureStorage.read(key: "CURRENT_USER_ID") ?? "0";
+  static Future<List<Caminhao>> list() async {
+    final prefs = await SharedPreferences.getInstance();
+    var userId = prefs.getString("CURRENT_USER_ID") ?? "0";
 
     try {
       var response = await caminhaoList(userId: int.parse(userId));
@@ -35,7 +33,9 @@ class CaminhaoController {
       {required String placa,
       required String transportadora,
       required String tipoCaminhao}) async {
-    var userId = await secureStorage.read(key: "CURRENT_USER_ID") ?? "0";
+    final prefs = await SharedPreferences.getInstance();
+    var userId = prefs.getString("CURRENT_USER_ID") ?? "0";
+    ;
 
     Caminhao caminhao = Caminhao(
         placa: placa,

@@ -3,16 +3,16 @@ import 'dart:convert';
 import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:app_truck_load/model/agendamento_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../routes/agendamento_routes.dart';
 
 class AgendamentoController {
-  static const secureStorage = FlutterSecureStorage();
-
-  Future<Agendamento> show() async {
-    var userId = await secureStorage.read(key: "CURRENT_USER_ID") ?? "0";
+  static Future<Agendamento> show() async {
+    final prefs = await SharedPreferences.getInstance();
+    var userId = prefs.getString("CURRENT_USER_ID") ?? "0";
+    ;
 
     Agendamento agendamento = Agendamento(
         placa: "",
@@ -46,7 +46,9 @@ class AgendamentoController {
       required String data,
       required String notaFiscal,
       required int tipo}) async {
-    var userId = await secureStorage.read(key: "CURRENT_USER_ID") ?? "0";
+    final prefs = await SharedPreferences.getInstance();
+    var userId = prefs.getString("CURRENT_USER_ID") ?? "0";
+    ;
 
     Agendamento agendamento = Agendamento(
         placa: placa,
@@ -120,7 +122,9 @@ class AgendamentoController {
   }
 
   Future<String> hasAgendamento() async {
-    var userId = await secureStorage.read(key: "CURRENT_USER_ID") ?? "0";
+    final prefs = await SharedPreferences.getInstance();
+    var userId = prefs.getString("CURRENT_USER_ID") ?? "0";
+    ;
     String hasAgendamento = "";
     try {
       var response = await hasAgendamentoAtivo(userId: int.parse(userId));

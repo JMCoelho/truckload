@@ -43,7 +43,7 @@ class _CaminhaoListPageState extends State<CaminhaoListPage> {
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height / 1.5,
                     child: FutureBuilder<List<Caminhao>>(
-                        future: caminhaoController.list(),
+                        future: CaminhaoController.list(),
                         builder: (BuildContext context,
                             AsyncSnapshot<List<Caminhao>> snapshot) {
                           try {

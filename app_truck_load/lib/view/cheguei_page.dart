@@ -36,7 +36,7 @@ class _ChegueiPageState extends State<ChegueiPage> {
             child: SizedBox(
               width: MediaQuery.of(context).size.width / 1.3,
               child: FutureBuilder<Agendamento>(
-                  future: agendamentoController.show(),
+                  future: AgendamentoController.show(),
                   builder: (BuildContext context,
                       AsyncSnapshot<Agendamento> snapshot) {
                     try {
