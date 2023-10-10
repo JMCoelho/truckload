@@ -22,7 +22,6 @@ class _EditarAgendamentoPageState extends State<EditarAgendamentoPage> {
 
   @override
   Widget build(BuildContext context) {
-    nfController.text = widget.agendamento.notaFiscal;
     carretaController.text = widget.agendamento.carreta;
     return Scaffold(
         drawer: SideBarMenu(),
@@ -47,60 +46,19 @@ class _EditarAgendamentoPageState extends State<EditarAgendamentoPage> {
                 TextField(
                   controller: carretaController,
                   onChanged: (text) {
-                    carretaController.text = text;
+                    widget.agendamento.carreta = text;
                   },
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: "Placa da Carreta"),
                 ),
-                SizedBox(height: 20),
-                TextField(
-                  controller: nfController,
-                  onChanged: (text) {
-                    widget.agendamento.notaFiscal = text;
-                  },
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: "Nota Fiscal"),
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height / 16,
-                  child: OutlinedButton(
-                      onPressed: () async {
-                        var res = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const SimpleBarcodeScannerPage(),
-                            ));
-                        setState(() {
-                          if (res is String) {
-                            nfController.text = res;
-                          }
-                        });
-                      },
-                      style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: Colors.black45)),
-                      child: FittedBox(
-                        fit: BoxFit.fitWidth,
-                        child: Icon(Icons.camera_alt,
-                            size: MediaQuery.of(context).size.width / 10,
-                            color: const Color.fromARGB(255, 12, 1, 1)),
-                      )),
-                ),
-                SizedBox(height: 100),
+                SizedBox(height: 120),
                 SizedBox(
                     width: MediaQuery.of(context).size.width / 2,
                     height: MediaQuery.of(context).size.height / 10,
                     child: FilledButton(
                       onPressed: () async {
                         EasyLoading.show(status: 'loading...');
-                        if (nfController.text != "") {
-                          widget.agendamento.notaFiscal = nfController.text;
-                        }
-
-                        widget.agendamento.carreta = carretaController.text;
                         if (await agendamentoController.updateAgendamento(
                             agendamento: widget.agendamento)) {
                           EasyLoading.dismiss();
